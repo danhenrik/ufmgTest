@@ -10,7 +10,7 @@ jobs:
   backend-unit-tests:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./api
+      working-directory: api
     defaults:
       run:
         working-directory: ${{ env.working-directory }}
