@@ -41,7 +41,6 @@ function errorHandler(error, req, res, next) {
     status = 406; // Not acceptable
   }
 
-  console.log(error);
   res.status(status).json(message);
 }
 
