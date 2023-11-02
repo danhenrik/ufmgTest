@@ -11,8 +11,9 @@ const TokenError = require('../../errors/TokenError');
 
 class UserService {
   async getCurrentUser(id) {
-    return await User.findByPk(id,
-      {attributes: {exclude: ['password', 'updatedAt', 'createdAt']}});
+    return await User.findByPk(id, {
+      attributes: {exclude: ['password', 'updatedAt', 'createdAt']},
+    });
   }
 
   async createUser(user) {
@@ -24,8 +25,13 @@ class UserService {
       await User.create(user);
     } catch (error) {
       if (user.image !== 'default-user-icon.jpg') {
-        await fs.unlink(path.resolve(__dirname,
-          '../../../react-app/public/upload', user.image));
+        await fs.unlink(
+          path.resolve(
+            __dirname,
+            '../../../react-app/public/upload',
+            user.image
+          )
+        );
       }
 
       throw error;
@@ -42,20 +48,20 @@ class UserService {
     }
   }
 
-  async updateUserPassword(queryField, value, body) {
-    const user = await User.findByPk(id,
-      {attributes: ['password']});
+  async updateUserPassword(id, body) {
+    const user = await User.findByPk(id, {attributes: ['password']});
 
-    const validate = await bcrypt.compare(
-      body.currentPassword,
-      user.password,
-    );
+    if (user === null) {
+      throw new QueryError(`Não há um usuário com o ID ${id}!`);
+    }
+
+    const validate = await bcrypt.compare(body.currentPassword, user.password);
 
     if (!validate) throw new NotAuthorizedError('Senha incorreta!');
 
     const passwordsAreEqual = await bcrypt.compare(
       body.newPassword,
-      user.password,
+      user.password
     );
 
     if (passwordsAreEqual) {
@@ -76,10 +82,7 @@ class UserService {
       const saltRounds = 10;
       const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
-      await User.update(
-        {password: hashedNewPassword},
-        {where: {email}},
-      );
+      await User.update({password: hashedNewPassword}, {where: {email}});
 
       await passwordToken.removeToken(token);
     } else {
@@ -108,19 +111,17 @@ class UserService {
     const perPage = options.perPage || 30;
     if (isNaN(perPage) || perPage <= 0 || perPage > 60) {
       throw new QueryError(
-        'Não é possível listar essa quantidade de usuários por vez!',
+        'Não é possível listar essa quantidade de usuários por vez!'
       );
     }
 
     const offset = (parseInt(page) - 1) * parseInt(perPage);
-    const result = await User.findAndCountAll(
-      {
-        offset: offset,
-        limit: parseInt(perPage),
-        order: [[orderBy, order]],
-        paranoid: false,
-      },
-    );
+    const result = await User.findAndCountAll({
+      offset: offset,
+      limit: parseInt(perPage),
+      order: [[orderBy, order]],
+      paranoid: false,
+    });
 
     const count = result.count;
 
@@ -165,4 +166,4 @@ class UserService {
   }
 }
 
-module.exports = new UserService;
+module.exports = new UserService();

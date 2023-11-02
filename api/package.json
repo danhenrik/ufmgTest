@@ -5,13 +5,14 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "mocha tests/**/*.test.js",
-    "test:cov": "nyc mocha tests/**/*.test.js"
+    "test": "mocha $(find tests -name '*.test.js')",
+    "test:cov": "nyc mocha $(find tests -name '*.test.js')"
   },
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "chai": "^4.3.10",
+    "chai-as-promised": "^7.1.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",

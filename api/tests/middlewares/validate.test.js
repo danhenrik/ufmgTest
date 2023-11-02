@@ -8,7 +8,7 @@ const {validate} = require('../../src/middlewares/validate');
 const fs = require('fs').promises;
 
 describe('Test validate midddleware', () => {
-  beforeEach(() => {
+  afterEach(() => {
     sandbox.restore();
   });
 

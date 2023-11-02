@@ -15,7 +15,7 @@ const {JsonWebTokenError} = require('jsonwebtoken');
 const {MulterError} = require('multer');
 
 describe('Test error handler middleware', () => {
-  beforeEach(() => {
+  afterEach(() => {
     sandbox.restore();
   });
 

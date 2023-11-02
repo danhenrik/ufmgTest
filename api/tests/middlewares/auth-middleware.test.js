@@ -13,7 +13,7 @@ const PermissionError = require('../../src/errors/PermissionError');
 const jwt = require('jsonwebtoken');
 
 describe('Test auth middlewares', () => {
-  beforeEach(() => {
+  afterEach(() => {
     sandbox.restore();
   });
 
