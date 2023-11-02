@@ -7,7 +7,7 @@ Este é um sistema bem simples de dashboard de gestão de usuários. Porém bem 
 
 ## 3. Tecnologias utilizadas
 
-As tecnologias utilizadas foram Node.js (JavaScript) utilizando o framework Express.js para construção do servidor REST e Jest para os testes unitários, Docker para a containerização, Redis como serviço de cache e MySQL para a persitência dos dados.
+As tecnologias utilizadas foram Node.js (JavaScript) utilizando o framework Express.js para construção do servidor REST e o conjunto de Mocha (para execução dos testes), SinonJS e proxyquire (para mocking e stubbing) e Chai e sua extensão a promises Chai-as-promised (para asserções), Docker para a containerização, Redis como serviço de cache storage de tokens e MySQL para a persitência dos dados.
 
 ## 4. Como executar
 
