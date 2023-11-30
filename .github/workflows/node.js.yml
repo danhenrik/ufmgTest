@@ -54,6 +54,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build and run Docker Compose
-        run: docker-compose up -d
+        run: |
+          docker-compose up -d 
+          sleep 10
       - name: Run end to end tests
         run: npm run test:e2e
