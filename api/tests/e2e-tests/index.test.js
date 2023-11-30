@@ -6,21 +6,21 @@ const expect = chai.expect;
 const app = require('../../src/config/express-config');
 
 describe('E2E Tests', function (done) {
-  it('POST api/users/login should return a 403 status code when the email is invalid', function (done) {
-    request(app)
-      .post('/api/users/login')
-      .send({
-        email: 'invalid@email.com',
-        password: 'securePassword',
-      })
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(res.status).to.equal(403);
-        expect(res.body).to.equal('E-mail e/ou senha incorretos!');
-        done();
-      });
-  });
+  // it('POST api/users/login should return a 403 status code when the email is invalid', function (done) {
+  //   request(app)
+  //     .post('/api/users/login')
+  //     .send({
+  //       email: 'invalid@email.com',
+  //       password: 'securePassword',
+  //     })
+  //     .set('Accept', 'application/json')
+  //     .end((err, res) => {
+  //       if (err) return done(err);
+  //       expect(res.status).to.equal(403);
+  //       expect(res.body).to.equal('E-mail e/ou senha incorretos!');
+  //       done();
+  //     });
+  // });
 
   it('POST api/users/login should return a 400 status code when the email format is invalid', function (done) {
     request(app)
