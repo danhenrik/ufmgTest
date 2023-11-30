@@ -22,18 +22,6 @@ describe('E2E Tests', function (done) {
       });
   });
 
-  it('POST api/users/logout should return a 404 status code when the token is invalid', function (done) {
-    request(app)
-      .post('/api/users/logout')
-      .set('Accept', 'application/json')
-      .set('Cookie', ['jwt=token'])
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(res.status).to.equal(404);
-        done();
-      });
-  });
-
   it('POST api/users/login should return a 400 status code when the email format is invalid', function (done) {
     request(app)
       .post('/api/users/login')
@@ -45,6 +33,18 @@ describe('E2E Tests', function (done) {
       .end((err, res) => {
         if (err) return done(err);
         expect(res.status).to.equal(400);
+        done();
+      });
+  });
+
+  it('POST api/users/logout should return a 404 status code when the token is invalid', function (done) {
+    request(app)
+      .post('/api/users/logout')
+      .set('Accept', 'application/json')
+      .set('Cookie', ['jwt=token'])
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.status).to.equal(404);
         done();
       });
   });
