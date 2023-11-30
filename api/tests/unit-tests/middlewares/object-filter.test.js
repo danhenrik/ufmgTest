@@ -2,7 +2,7 @@
 const {expect} = require('chai');
 const sandbox = require('sinon').createSandbox();
 
-const {requestFilter} = require('../../src/middlewares/object-filter');
+const {requestFilter} = require('../../../src/middlewares/object-filter');
 
 describe('Test object-filter middleware', () => {
   beforeEach(() => {
@@ -26,16 +26,6 @@ describe('Test object-filter middleware', () => {
 
     expect(request.body).to.deep.equal({});
   });
-
-  // it('requestFilter should call next with an error if an error is thrown', () => {
-  //   const err = Error('error');
-  //   sandbox.stub(Object, 'keys').throws(err);
-  //   const next = sandbox.spy();
-
-  //   requestFilter('params', ['id'])(request, {}, next);
-
-  //   expect(next.calledWithExactly(err)).to.be.true;
-  // });
 });
 
 const request = {

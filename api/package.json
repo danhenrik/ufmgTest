@@ -5,9 +5,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test:unit": "mocha $(find tests -name '*.test.js')",
-    "test:int": "",
-    "test:cov": "nyc --reporter=lcov mocha $(find tests -name '*.test.js')"
+    "test:unit": "mocha $(find tests/unit-tests -name '*.test.js')",
+    "test:e2e": "mocha --exit tests/e2e-tests/index.test.js",
+    "test:cov": "nyc --reporter=lcov mocha $(find tests/unit-tests -name '*.test.js')"
   },
   "license": "ISC",
   "dependencies": {
@@ -34,7 +34,8 @@
     "proxyquire": "^2.1.3",
     "redis": "^3.0.2",
     "sequelize": "^6.4.0",
-    "sinon": "^17.0.0"
+    "sinon": "^17.0.0",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
     "eslint": "^7.18.0",

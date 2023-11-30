@@ -1,5 +1,5 @@
 const {
-  setAysnc,
+  setAsync,
   selectAsync,
   getAsync,
   delAsync,
@@ -11,7 +11,7 @@ const {randomBytes} = require('crypto');
 async function generateToken(email) {
   const token = randomBytes(128).toString('hex');
   await selectAsync(passwordTokenDb);
-  await setAysnc(token, email);
+  await setAsync(token, email);
   const oneHourFromNow = Date.now()+3600;
   redisCli.expireat(token, oneHourFromNow);
   return token;

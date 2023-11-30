@@ -11,20 +11,12 @@ app.use(cookieParser());
 
 require('./auth');
 
-app.use(express.urlencoded({
-  extended: true,
-}));
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+);
 app.use(express.json());
-
-const csrf = require('csurf');
-app.use(csrf({cookie: true}));
-app.get('/api/csrf', (req, res, next) => {
-  try {
-    res.status(200).send(req.csrfToken());
-  } catch (error) {
-    next(error);
-  }
-});
 
 const usersRouter = require('../users/controllers');
 app.use('/api/users', usersRouter);

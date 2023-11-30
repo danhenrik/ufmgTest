@@ -2,7 +2,7 @@
 const {expect} = require('chai');
 const sandbox = require('sinon').createSandbox();
 
-const errorHandler = require('../../src/middlewares/error-handler');
+const errorHandler = require('../../../src/middlewares/error-handler');
 
 const {
   InvalidParamError,
@@ -10,7 +10,7 @@ const {
   NotAuthorizedError,
   QueryError,
   TokenError,
-} = require('../../src/errors');
+} = require('../../../src/errors');
 const {JsonWebTokenError} = require('jsonwebtoken');
 const {MulterError} = require('multer');
 

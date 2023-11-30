@@ -1,6 +1,6 @@
 const {
   existsAsync,
-  setAysnc,
+  setAsync,
   selectAsync,
   redisCli,
   blacklistDb,
@@ -16,7 +16,7 @@ async function addToken(token) {
   const expiryDate = jwt.decode(token).exp;
   const hashToken = generateHashToken(token);
   await selectAsync(blacklistDb);
-  await setAysnc(hashToken, '');
+  await setAsync(hashToken, '');
   redisCli.expireat(hashToken, expiryDate);
 }
 

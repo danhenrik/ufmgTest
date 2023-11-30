@@ -5,10 +5,12 @@ const UserService = require('../services/UserService');
 const SendMailService = require('../services/SendMailService');
 const blacklist = require('../../redis/blacklist');
 const passwordToken = require('../../redis/password-token');
-const {loginMiddleware,
+const {
+  loginMiddleware,
   jwtMiddleware,
   checkRole,
-  notLoggedIn} = require('../../middlewares/auth-middlewares');
+  notLoggedIn,
+} = require('../../middlewares/auth-middlewares');
 const {userValidate} = require('../../middlewares/user-validators');
 const {upload} = require('../../middlewares/multer');
 const InvalidRouteError = require('../../errors/InvalidRouteError');
@@ -23,27 +25,25 @@ router.post('/login', notLoggedIn(), userValidate('login'), loginMiddleware);
 /**
  * Envia o JWT atual para a blacklist para que ele não seja mais válido.
  */
-router.get('/logout',
-  jwtMiddleware,
-  async (req, res, next) => {
-    try {
-      const token = req.cookies['jwt'];
-      await blacklist.addToken(token);
+router.get('/logout', jwtMiddleware, async (req, res, next) => {
+  try {
+    const token = req.cookies['jwt'];
+    await blacklist.addToken(token);
 
-      req.logout();
-      res.clearCookie('jwt');
-      res.status(204).end();
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+    req.logout();
+    res.clearCookie('jwt');
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * Ver dados de todos os usuários, pega as opções
  * de ordenação, página e número de consultas do body.
  */
-router.get('/',
+router.get(
+  '/',
   jwtMiddleware,
   requestFilter('query', ['page', 'order', 'orderBy', 'perPage']),
   async (req, res, next) => {
@@ -54,14 +54,15 @@ router.get('/',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 /**
  * Criação de usuário, verifica todos os campos necessários
  * para a criação de um usuário e envia para o banco.
  */
-router.post('/',
+router.post(
+  '/',
   jwtMiddleware,
   checkRole('admin'),
   upload('new'),
@@ -82,32 +83,30 @@ router.post('/',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 /**
  * Página de usuário, envia as informações do usuário atual para o front.
  */
-router.get('/user',
-  jwtMiddleware,
-  async (req, res, next) => {
-    try {
-      if (req.user) {
-        const user = await UserService.getCurrentUser(req.user.id);
-        res.status(200).json(user);
-      }
-    } catch (error) {
-      next(error);
+router.get('/user', jwtMiddleware, async (req, res, next) => {
+  try {
+    if (req.user) {
+      const user = await UserService.getCurrentUser(req.user.id);
+      res.status(200).json(user);
     }
-  },
-);
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * Editar informções de usuário, recebe e verifica as informações no body
  * para atualizar no banco de dados.
  * Falta realizar a verificação de que os dados forma alterados.
  */
-router.put('/user',
+router.put(
+  '/user',
   jwtMiddleware,
   upload('userUpdate'),
   requestFilter('body', ['name', 'email', 'personalEmail']),
@@ -120,14 +119,15 @@ router.put('/user',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 /**
  * Recebe o id de um usuário qualquer nos parâmetros,
  * retorna o usuário com esse id.
  */
-router.get('/user/:id',
+router.get(
+  '/user/:id',
   jwtMiddleware,
   checkRole('admin'),
   async (req, res, next) => {
@@ -139,7 +139,7 @@ router.get('/user/:id',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 /**
@@ -147,7 +147,8 @@ router.get('/user/:id',
  * admins e não deve ser usada para alterar as informações do usuário logado.
  * Implementação muito parecida com a PUT /users/user
  */
-router.put('/user/:id',
+router.put(
+  '/user/:id',
   jwtMiddleware,
   checkRole('admin'),
   upload('adminUpdate'),
@@ -158,12 +159,19 @@ router.put('/user/:id',
       // O comparador utilizado foi '==' por motivos de conversão de tipos
       if (id == req.user.id) {
         if (req.file) {
-          await unlink(path.resolve(__dirname,
-            '../../../react-app/public/upload', req.file.filename));
+          await unlink(
+            path.resolve(
+              __dirname,
+              '../../../react-app/public/upload',
+              req.file.filename
+            )
+          );
         }
 
-        throw new InvalidRouteError('Utilize a rota PUT /users/user' +
-          ' para atualizar as próprias informações!');
+        throw new InvalidRouteError(
+          'Utilize a rota PUT /users/user' +
+            ' para atualizar as próprias informações!'
+        );
       }
 
       req.body.image = req.file ? req.file.filename : undefined;
@@ -172,14 +180,15 @@ router.put('/user/:id',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 /**
  * Editar senha, similar ao editar as outras informações,
  * mas também realiza criptografia da senha.
  */
-router.put('/password',
+router.put(
+  '/password',
   jwtMiddleware,
   userValidate('updatePassword'),
   async (req, res, next) => {
@@ -189,12 +198,15 @@ router.put('/password',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
-router.post('/forgotPassword',
-  notLoggedIn('Você não pode usar a funcionalidade de Esqueci Minha Senha ' +
-    'estando logado!'),
+router.post(
+  '/forgotPassword',
+  notLoggedIn(
+    'Você não pode usar a funcionalidade de Esqueci Minha Senha ' +
+      'estando logado!'
+  ),
   userValidate('forgotPassword'),
   async (req, res, next) => {
     try {
@@ -206,8 +218,12 @@ router.post('/forgotPassword',
           subject: 'Redefinição de Senha',
         };
 
-        mailInfo.path = await path
-          .resolve(__dirname, '..', 'views', 'email.html');
+        mailInfo.path = await path.resolve(
+          __dirname,
+          '..',
+          'views',
+          'email.html'
+        );
 
         const token = await passwordToken.generateToken(user.email);
 
@@ -222,12 +238,15 @@ router.post('/forgotPassword',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
-router.post('/resetPassword',
-  notLoggedIn('Você não pode usar a funcionalidade de Esqueci Minha Senha ' +
-    'estando logado!'),
+router.post(
+  '/resetPassword',
+  notLoggedIn(
+    'Você não pode usar a funcionalidade de Esqueci Minha Senha ' +
+      'estando logado!'
+  ),
   userValidate('resetPassword'),
   async (req, res, next) => {
     try {
@@ -240,10 +259,11 @@ router.post('/resetPassword',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
-router.put('/deactivate',
+router.put(
+  '/deactivate',
   jwtMiddleware,
   checkRole('admin'),
   async (req, res, next) => {
@@ -260,10 +280,11 @@ router.put('/deactivate',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
-router.put('/activate',
+router.put(
+  '/activate',
   jwtMiddleware,
   checkRole('admin'),
   async (req, res, next) => {
@@ -279,7 +300,7 @@ router.put('/activate',
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 module.exports = router;

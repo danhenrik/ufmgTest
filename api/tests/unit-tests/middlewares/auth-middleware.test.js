@@ -4,12 +4,10 @@ const sandbox = require('sinon').createSandbox();
 
 const {
   checkRole,
-  // jwtMiddleware,
-  // loginMiddleware,
   notLoggedIn,
-} = require('../../src/middlewares/auth-middlewares');
+} = require('../../../src/middlewares/auth-middlewares');
 
-const PermissionError = require('../../src/errors/PermissionError');
+const PermissionError = require('../../../src/errors/PermissionError');
 const jwt = require('jsonwebtoken');
 
 describe('Test auth middlewares', () => {
@@ -50,18 +48,6 @@ describe('Test auth middlewares', () => {
 
     expect(next.calledWithExactly(sandbox.match.instanceOf(PermissionError))).to.be.true;
   });
-
-  // it('jwtMiddleware should be a valid express middleware (3 parameters)', () => {
-  //   expect(jwtMiddleware['length']).to.equal(3);
-  // });
-
-  // flow is very complex, test only if really needed
-
-  // it('loginMiddleware should be a valid express middleware (3 parameters)', () => {
-  //   expect(loginMiddleware['length']).to.equal(3);
-  // });
-
-  // flow is very complex, test only if really needed
 
   it('notLoggedIn should return a valid express middleware (3 parameters)', () => {
     const middleware = notLoggedIn('errorMessage');

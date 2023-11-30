@@ -3,7 +3,7 @@ const {expect} = require('chai');
 const sandbox = require('sinon').createSandbox();
 const proxyquire = require('proxyquire');
 
-const {validate} = require('../../src/middlewares/validate');
+const {validate} = require('../../../src/middlewares/validate');
 
 const fs = require('fs').promises;
 
@@ -30,7 +30,7 @@ describe('Test validate midddleware', () => {
   it('validator should proceed when valitation error set is empty', async () => {
     const validations = [{run: sandbox.spy()}, {run: sandbox.spy()}];
     // need to use this proxy library to mock because of the way the library is built
-    const validator = proxyquire('../../src/middlewares/validate', {
+    const validator = proxyquire('../../../src/middlewares/validate', {
       'express-validator': {
         validationResult: () => {
           return {isEmpty: () => true};
@@ -49,7 +49,7 @@ describe('Test validate midddleware', () => {
     const validations = [{run: sandbox.spy()}, {run: sandbox.spy()}];
     // need to use this proxy library to mock because of the way the library is built
     // it impacts performance negatively but it's the only way to mock this library
-    const validator = proxyquire('../../src/middlewares/validate', {
+    const validator = proxyquire('../../../src/middlewares/validate', {
       'express-validator': {
         validationResult: () => {
           return {
@@ -78,7 +78,7 @@ describe('Test validate midddleware', () => {
   it('validator should unlink saved file if present', async () => {
     const unlinkSpy = sandbox.spy(fs, 'unlink');
     const validations = [{run: sandbox.spy()}, {run: sandbox.spy()}];
-    const validator = proxyquire('../../src/middlewares/validate', {
+    const validator = proxyquire('../../../src/middlewares/validate', {
       'express-validator': {
         validationResult: () => {
           return {
