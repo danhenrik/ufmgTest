@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "test:unit": "mocha $(find tests/unit-tests -name '*.test.js')",
     "test:e2e": "mocha --exit tests/e2e-tests/index.test.js",
     "test:cov": "nyc --reporter=lcov mocha $(find tests/unit-tests -name '*.test.js')"
